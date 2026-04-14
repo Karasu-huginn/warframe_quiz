@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nicedoc/tauri/v2/crates/tauri-cli/schema.json",
+  "productName": "Warframedle",
+  "version": "0.1.0",
+  "identifier": "com.warframedle.app",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "title": "Warframedle",
+    "windows": [
+      {
+        "title": "Warframedle",
+        "width": 1024,
+        "height": 768
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": false
+  }
+}
