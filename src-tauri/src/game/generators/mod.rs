@@ -2,6 +2,9 @@ pub mod warframe_by_abilities;
 pub mod warframe_by_ability;
 pub mod warframe_by_image;
 pub mod weapon_by_stats;
+pub mod mod_by_effect;
+pub mod boss_faction;
+pub mod planet_by_resource;
 
 use rusqlite::Connection;
 use rand::seq::SliceRandom;
@@ -17,6 +20,9 @@ pub fn generate_question(
         warframe_by_ability::generate,
         warframe_by_image::generate,
         weapon_by_stats::generate,
+        mod_by_effect::generate,
+        boss_faction::generate,
+        planet_by_resource::generate,
     ];
 
     let mut indices: Vec<usize> = (0..types.len()).collect();
