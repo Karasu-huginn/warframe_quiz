@@ -55,7 +55,7 @@ impl WikiClient {
             return Err(format!("Module not found: {module_name}"));
         }
 
-        page["revisions"][0]["slots"]["main"]["content"]
+        page["revisions"][0]["slots"]["main"]["*"]
             .as_str()
             .map(|s| s.to_string())
             .ok_or_else(|| "no content in revision".to_string())
