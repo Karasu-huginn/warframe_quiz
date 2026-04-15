@@ -4,3 +4,6 @@ pub mod weapons;
 pub mod mods;
 pub mod companions;
 pub mod bosses;
+pub mod planets;
+pub mod factions;
+pub mod focus;
