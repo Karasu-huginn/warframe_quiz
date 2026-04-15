@@ -22,7 +22,10 @@ pub fn run() {
             app.manage(database);
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![commands::get_db_stats])
+        .invoke_handler(tauri::generate_handler![
+            commands::get_db_stats,
+            commands::fetch_wiki_data
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
