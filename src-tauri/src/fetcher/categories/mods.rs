@@ -11,7 +11,12 @@ pub fn fetch_mods(conn: &Connection, wiki: &WikiClient) -> Result<CategoryResult
 }
 
 pub fn process_mods_data(conn: &Connection, data: &Value) -> Result<CategoryResult, String> {
-    let entries = data.as_object().ok_or("mods data: expected object")?;
+    // Wiki module nests mods under a "Mods" key; also handle flat structure (for tests)
+    let entries = if let Some(mods_section) = data.get("Mods").and_then(|v| v.as_object()) {
+        mods_section.clone()
+    } else {
+        data.as_object().ok_or("mods data: expected object")?.clone()
+    };
     let mut report = CategoryReport { category: "mods".to_string(), ..Default::default() };
     let mut images = Vec::new();
 

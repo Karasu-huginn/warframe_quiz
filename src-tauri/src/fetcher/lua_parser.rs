@@ -12,6 +12,45 @@ pub fn eval_lua_module(source: &str) -> Result<Value, String> {
         .set("require", dummy_require)
         .map_err(|e| format!("failed to set require: {e}"))?;
 
+    // Override string.format to handle float-to-integer coercion (Lua 5.4 is strict,
+    // but wiki modules pass floats to %X/%d formats expecting automatic truncation)
+    lua.load(r#"
+        local orig_format = string.format
+        string.format = function(fmt, ...)
+            local args = {...}
+            local new_args = {}
+            local i = 0
+            fmt:gsub("%%[%-%+ #0]*%d*%.?%d*([diouxXeEfgGqscpaA%%])", function(spec)
+                i = i + 1
+                if (spec == "d" or spec == "i" or spec == "o" or spec == "u" or spec == "x" or spec == "X") and type(args[i]) == "number" then
+                    new_args[i] = math.floor(args[i])
+                else
+                    new_args[i] = args[i]
+                end
+            end)
+            for j = 1, #args do
+                if new_args[j] == nil then new_args[j] = args[j] end
+            end
+            return orig_format(fmt, table.unpack(new_args))
+        end
+    "#).exec().map_err(|e| format!("failed to patch string.format: {e}"))?;
+
+    // Add table.size() — used by some wiki modules (e.g., Void/data for relics)
+    let table_lib: LuaTable = lua.globals().get("table")
+        .map_err(|e| format!("failed to get table lib: {e}"))?;
+    let size_fn = lua
+        .create_function(|_lua, tbl: LuaTable| {
+            let mut count = 0i64;
+            for pair in tbl.pairs::<LuaValue, LuaValue>() {
+                let _ = pair?;
+                count += 1;
+            }
+            Ok(count)
+        })
+        .map_err(|e| format!("failed to create table.size: {e}"))?;
+    table_lib.set("size", size_fn)
+        .map_err(|e| format!("failed to set table.size: {e}"))?;
+
     let table: LuaTable = lua
         .load(source)
         .eval()

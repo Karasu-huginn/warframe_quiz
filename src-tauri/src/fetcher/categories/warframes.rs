@@ -11,13 +11,30 @@ pub fn fetch_warframes(conn: &Connection, wiki: &WikiClient) -> Result<CategoryR
 }
 
 pub fn process_warframes_data(conn: &Connection, data: &Value) -> Result<CategoryResult, String> {
-    let entries = data.as_object().ok_or("warframes data: expected object")?;
+    let root = data.as_object().ok_or("warframes data: expected object")?;
     let mut report = CategoryReport { category: "warframes".to_string(), ..Default::default() };
     let mut images = Vec::new();
 
     let tx = conn.unchecked_transaction().map_err(|e| e.to_string())?;
 
-    for (_key, entry) in entries {
+    // The wiki module nests entries under category keys: Warframe, Archwings, Necramechs, Operators
+    // Merge all sub-tables, but also handle flat structure (for tests)
+    let mut all_entries: Vec<&Value> = Vec::new();
+    for (key, value) in root {
+        if value.is_object() && value.get("Name").is_some() {
+            // Flat structure: entry directly at root level
+            all_entries.push(value);
+        } else if let Some(sub_table) = value.as_object() {
+            // Nested structure: sub-table containing entries
+            for (_sub_key, entry) in sub_table {
+                if entry.is_object() {
+                    all_entries.push(entry);
+                }
+            }
+        }
+    }
+
+    for entry in &all_entries {
         let name = match entry["Name"].as_str() {
             Some(n) if !n.is_empty() => n,
             _ => continue,
