@@ -1,4 +1,7 @@
 pub mod warframe_by_abilities;
+pub mod warframe_by_ability;
+pub mod warframe_by_image;
+pub mod weapon_by_stats;
 
 use rusqlite::Connection;
 use rand::seq::SliceRandom;
@@ -11,6 +14,9 @@ pub fn generate_question(
 ) -> Result<(Question, StoredQuestion), String> {
     let types: Vec<fn(&Connection, u64, Option<u32>) -> Result<(Question, StoredQuestion), String>> = vec![
         warframe_by_abilities::generate,
+        warframe_by_ability::generate,
+        warframe_by_image::generate,
+        weapon_by_stats::generate,
     ];
 
     let mut indices: Vec<usize> = (0..types.len()).collect();
