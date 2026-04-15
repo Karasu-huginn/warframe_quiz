@@ -39,7 +39,7 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
 
         CREATE TABLE IF NOT EXISTS weapons (
             id              INTEGER PRIMARY KEY AUTOINCREMENT,
-            name            TEXT NOT NULL,
+            name            TEXT NOT NULL UNIQUE,
             type            TEXT NOT NULL,
             subtype         TEXT NOT NULL DEFAULT '',
             mastery_rank    INTEGER NOT NULL DEFAULT 0,
