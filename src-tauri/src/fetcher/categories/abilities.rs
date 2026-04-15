@@ -46,7 +46,7 @@ pub fn process_abilities_data(conn: &Connection, data: &Value) -> Result<Categor
         let icon_filename = entry["Icon"].as_str().map(|s| s.to_string());
 
         // FK lookup: find warframe_id from PowerSuit name
-        let powersuit = match entry["PowerSuit"].as_str() {
+        let powersuit = match entry["Powersuit"].as_str() {
             Some(ps) if !ps.is_empty() => ps,
             _ => {
                 // No PowerSuit field — skip
@@ -115,12 +115,12 @@ mod tests {
         let data = lua_parser::eval_lua_module(r#"return {
             ["SlashDash"] = {
                 Name = "Slash Dash", Cost = 25, Description = "Dash through enemies",
-                Icon = "SlashDash.png", PowerSuit = "Excalibur", Key = 1,
+                Icon = "SlashDash.png", Powersuit = "Excalibur", Key = 1,
                 Subsumable = false, Augment = ""
             },
             ["RadialBlind"] = {
                 Name = "Radial Blind", Cost = 50, Description = "Blind enemies",
-                Icon = "RadialBlind.png", PowerSuit = "Excalibur", Key = 2,
+                Icon = "RadialBlind.png", Powersuit = "Excalibur", Key = 2,
                 Subsumable = false, Augment = ""
             }
         }"#).unwrap();
@@ -144,7 +144,7 @@ mod tests {
             Warframe = {
                 ["SlashDash"] = {
                     Name = "Slash Dash", Cost = 25, Description = "Dash through enemies",
-                    Icon = "SlashDash.png", PowerSuit = "Excalibur", Key = 1,
+                    Icon = "SlashDash.png", Powersuit = "Excalibur", Key = 1,
                     Subsumable = false, Augment = ""
                 }
             }
@@ -166,7 +166,7 @@ mod tests {
         let data = lua_parser::eval_lua_module(r#"return {
             ["SlashDash"] = {
                 Name = "Slash Dash", Cost = 25, Description = "Dash",
-                Icon = "SlashDash.png", PowerSuit = "Excalibur", Key = 1,
+                Icon = "SlashDash.png", Powersuit = "Excalibur", Key = 1,
                 Subsumable = false, Augment = ""
             }
         }"#).unwrap();
@@ -184,7 +184,7 @@ mod tests {
         let data = lua_parser::eval_lua_module(r#"return {
             ["SlashDash"] = {
                 Name = "Slash Dash", Cost = 25, Description = "Dash",
-                Icon = "SlashDash.png", PowerSuit = "Excalibur", Key = 1,
+                Icon = "SlashDash.png", Powersuit = "Excalibur", Key = 1,
                 Subsumable = false, Augment = ""
             }
         }"#).unwrap();
@@ -205,7 +205,7 @@ mod tests {
         let data = lua_parser::eval_lua_module(r#"return {
             ["SlashDash"] = {
                 Name = "Slash Dash", Cost = 25, Description = "Dash",
-                Icon = "SlashDash.png", PowerSuit = "Excalibur", Key = 1,
+                Icon = "SlashDash.png", Powersuit = "Excalibur", Key = 1,
                 Subsumable = true, Augment = "Slash Dash Augment"
             }
         }"#).unwrap();

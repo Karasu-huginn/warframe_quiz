@@ -4,13 +4,42 @@ use serde_json::{Map, Value};
 pub fn eval_lua_module(source: &str) -> Result<Value, String> {
     let lua = Lua::new();
 
-    // Provide a dummy require() so modules that reference other modules don't crash
-    let dummy_require = lua
-        .create_function(|lua_ctx, _name: String| lua_ctx.create_table())
-        .map_err(|e| format!("failed to create dummy require: {e}"))?;
-    lua.globals()
-        .set("require", dummy_require)
-        .map_err(|e| format!("failed to set require: {e}"))?;
+    // Provide a smart require() that returns stub modules with common utility functions.
+    // Wiki modules use require('Module:Table'), require('Module:Math'), etc.
+    lua.load(r#"
+        local _stubs = {
+            ["Module:Table"] = {
+                size = function(t)
+                    local count = 0
+                    for _ in pairs(t) do count = count + 1 end
+                    return count
+                end,
+                indexOf = function(t, val)
+                    for i, v in ipairs(t) do if v == val then return i end end
+                    return nil
+                end,
+                contains = function(t, val)
+                    for _, v in pairs(t) do if v == val then return true end end
+                    return false
+                end,
+                keys = function(t)
+                    local result = {}
+                    for k in pairs(t) do result[#result+1] = k end
+                    return result
+                end,
+            },
+            ["Module:Math"] = {
+                round = function(x, n)
+                    n = n or 0
+                    local mult = 10^n
+                    return math.floor(x * mult + 0.5) / mult
+                end,
+            },
+        }
+        function require(name)
+            return _stubs[name] or {}
+        end
+    "#).exec().map_err(|e| format!("failed to set up require stubs: {e}"))?;
 
     // Override string.format to handle float-to-integer coercion (Lua 5.4 is strict,
     // but wiki modules pass floats to %X/%d formats expecting automatic truncation)
@@ -34,16 +63,6 @@ pub fn eval_lua_module(source: &str) -> Result<Value, String> {
             return orig_format(fmt, table.unpack(new_args))
         end
     "#).exec().map_err(|e| format!("failed to patch string.format: {e}"))?;
-
-    // Add table.size() via Lua code — must be done before loading the module
-    // because some modules capture `local table = table` at the top
-    lua.load(r#"
-        function table.size(t)
-            local count = 0
-            for _ in pairs(t) do count = count + 1 end
-            return count
-        end
-    "#).exec().map_err(|e| format!("failed to add table.size: {e}"))?;
 
     let table: LuaTable = lua
         .load(source)
