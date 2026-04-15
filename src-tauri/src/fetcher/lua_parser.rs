@@ -35,21 +35,15 @@ pub fn eval_lua_module(source: &str) -> Result<Value, String> {
         end
     "#).exec().map_err(|e| format!("failed to patch string.format: {e}"))?;
 
-    // Add table.size() — used by some wiki modules (e.g., Void/data for relics)
-    let table_lib: LuaTable = lua.globals().get("table")
-        .map_err(|e| format!("failed to get table lib: {e}"))?;
-    let size_fn = lua
-        .create_function(|_lua, tbl: LuaTable| {
-            let mut count = 0i64;
-            for pair in tbl.pairs::<LuaValue, LuaValue>() {
-                let _ = pair?;
-                count += 1;
-            }
-            Ok(count)
-        })
-        .map_err(|e| format!("failed to create table.size: {e}"))?;
-    table_lib.set("size", size_fn)
-        .map_err(|e| format!("failed to set table.size: {e}"))?;
+    // Add table.size() via Lua code — must be done before loading the module
+    // because some modules capture `local table = table` at the top
+    lua.load(r#"
+        function table.size(t)
+            local count = 0
+            for _ in pairs(t) do count = count + 1 end
+            return count
+        end
+    "#).exec().map_err(|e| format!("failed to add table.size: {e}"))?;
 
     let table: LuaTable = lua
         .load(source)

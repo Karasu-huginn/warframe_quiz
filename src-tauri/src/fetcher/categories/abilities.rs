@@ -11,9 +11,12 @@ pub fn fetch_abilities(conn: &Connection, wiki: &WikiClient) -> Result<CategoryR
 }
 
 pub fn process_abilities_data(conn: &Connection, data: &Value) -> Result<CategoryResult, String> {
-    // The module may have abilities nested under a "Warframe" key, or directly at root level
-    let entries = if let Some(wf_section) = data.get("Warframe").and_then(|v| v.as_object()) {
-        wf_section.clone()
+    // The wiki module nests abilities under an "Ability" key (not "Warframe").
+    // Also handle "Warframe" key or flat structure for backwards compatibility / tests.
+    let entries = if let Some(section) = data.get("Ability").and_then(|v| v.as_object()) {
+        section.clone()
+    } else if let Some(section) = data.get("Warframe").and_then(|v| v.as_object()) {
+        section.clone()
     } else {
         data.as_object().ok_or("abilities data: expected object")?.clone()
     };
