@@ -6,8 +6,8 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
 
         CREATE TABLE IF NOT EXISTS warframes (
             id              INTEGER PRIMARY KEY AUTOINCREMENT,
-            name            TEXT NOT NULL,
-            type            TEXT NOT NULL,
+            name            TEXT NOT NULL UNIQUE,
+            type            TEXT NOT NULL DEFAULT 'Warframe',
             description     TEXT NOT NULL DEFAULT '',
             health          REAL,
             shields         REAL,
@@ -15,14 +15,14 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
             energy          REAL,
             sprint_speed    REAL,
             passive         TEXT NOT NULL DEFAULT '',
-            mastery_rank    INTEGER NOT NULL DEFAULT 0,
+            mastery_rank    INTEGER,
             acquisition     TEXT NOT NULL DEFAULT '',
-            release_date    TEXT NOT NULL DEFAULT '',
+            release_date    TEXT,
             prime_variant   TEXT NOT NULL DEFAULT '',
             is_vaulted      INTEGER NOT NULL DEFAULT 0,
-            helminth_ability TEXT NOT NULL DEFAULT '',
-            sex             TEXT NOT NULL DEFAULT '',
-            icon_path       TEXT NOT NULL DEFAULT ''
+            helminth_ability TEXT,
+            sex             TEXT,
+            icon_path       TEXT
         );
 
         CREATE TABLE IF NOT EXISTS abilities (

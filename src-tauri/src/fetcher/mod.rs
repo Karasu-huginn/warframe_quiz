@@ -1,5 +1,6 @@
 pub mod wiki_client;
 pub mod lua_parser;
+pub mod categories;
 
 #[derive(Debug, Default)]
 pub struct CategoryReport {
