@@ -6,8 +6,6 @@ interface DbStats {
   ability_count: number;
   weapon_count: number;
   mod_count: number;
-  character_count: number;
-  quote_count: number;
 }
 
 function App() {
@@ -32,8 +30,6 @@ function App() {
             <li>Abilities: {stats.ability_count}</li>
             <li>Weapons: {stats.weapon_count}</li>
             <li>Mods: {stats.mod_count}</li>
-            <li>Characters: {stats.character_count}</li>
-            <li>Quotes: {stats.quote_count}</li>
           </ul>
         </div>
       )}

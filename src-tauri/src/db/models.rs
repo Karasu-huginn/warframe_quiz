@@ -80,24 +80,3 @@ pub struct Mod {
     pub augment_warframe_id: Option<i64>,
     pub icon_path: Option<String>,
 }
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Character {
-    pub id: i64,
-    pub name: String,
-    pub description: String,
-    pub faction: String,
-    pub location: String,
-    pub role: String,
-    pub voice_actor: Option<String>,
-    pub icon_path: Option<String>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Quote {
-    pub id: i64,
-    pub character_id: i64,
-    pub quote_text: String,
-    pub audio_path: Option<String>,
-    pub context: String,
-}

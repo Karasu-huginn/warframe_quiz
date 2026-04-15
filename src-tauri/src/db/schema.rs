@@ -79,25 +79,6 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
             icon_path       TEXT NOT NULL DEFAULT ''
         );
 
-        CREATE TABLE IF NOT EXISTS characters (
-            id          INTEGER PRIMARY KEY AUTOINCREMENT,
-            name        TEXT NOT NULL,
-            description TEXT NOT NULL DEFAULT '',
-            faction     TEXT NOT NULL DEFAULT '',
-            location    TEXT NOT NULL DEFAULT '',
-            role        TEXT NOT NULL DEFAULT '',
-            voice_actor TEXT NOT NULL DEFAULT '',
-            icon_path   TEXT NOT NULL DEFAULT ''
-        );
-
-        CREATE TABLE IF NOT EXISTS quotes (
-            id           INTEGER PRIMARY KEY AUTOINCREMENT,
-            character_id INTEGER REFERENCES characters(id),
-            quote_text   TEXT NOT NULL,
-            audio_path   TEXT NOT NULL DEFAULT '',
-            context      TEXT NOT NULL DEFAULT ''
-        );
-
         -- Tier 2: World & progression
 
         CREATE TABLE IF NOT EXISTS bosses (
@@ -108,8 +89,7 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
             description   TEXT NOT NULL DEFAULT '',
             warframe_drop TEXT NOT NULL DEFAULT '',
             mechanics     TEXT NOT NULL DEFAULT '',
-            icon_path     TEXT NOT NULL DEFAULT '',
-            character_id  INTEGER REFERENCES characters(id)
+            icon_path     TEXT NOT NULL DEFAULT ''
         );
 
         CREATE TABLE IF NOT EXISTS companions (
@@ -131,17 +111,6 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
             description  TEXT NOT NULL DEFAULT '',
             companion_id INTEGER REFERENCES companions(id),
             icon_path    TEXT NOT NULL DEFAULT ''
-        );
-
-        CREATE TABLE IF NOT EXISTS quests (
-            id                    INTEGER PRIMARY KEY AUTOINCREMENT,
-            name                  TEXT NOT NULL,
-            description           TEXT NOT NULL DEFAULT '',
-            prerequisite_quest_id INTEGER REFERENCES quests(id),
-            mastery_requirement   INTEGER NOT NULL DEFAULT 0,
-            reward_summary        TEXT NOT NULL DEFAULT '',
-            storyline_summary     TEXT NOT NULL DEFAULT '',
-            sort_order            INTEGER NOT NULL DEFAULT 0
         );
 
         CREATE TABLE IF NOT EXISTS planets (
@@ -167,8 +136,7 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
             name                 TEXT NOT NULL,
             description          TEXT NOT NULL DEFAULT '',
             leader_name          TEXT NOT NULL DEFAULT '',
-            sigil_path           TEXT NOT NULL DEFAULT '',
-            leader_character_id  INTEGER REFERENCES characters(id)
+            sigil_path           TEXT NOT NULL DEFAULT ''
         );
 
         CREATE TABLE IF NOT EXISTS syndicate_relations (
@@ -239,63 +207,10 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
             is_passive  INTEGER NOT NULL DEFAULT 0
         );
 
-        CREATE TABLE IF NOT EXISTS progenitor_elements (
-            id          INTEGER PRIMARY KEY AUTOINCREMENT,
-            warframe_id INTEGER REFERENCES warframes(id),
-            element     TEXT NOT NULL
-        );
-
         CREATE TABLE IF NOT EXISTS requiem_mods (
             id          INTEGER PRIMARY KEY AUTOINCREMENT,
             name        TEXT NOT NULL,
             symbol_path TEXT NOT NULL DEFAULT ''
-        );
-
-        CREATE TABLE IF NOT EXISTS incarnon_weapons (
-            id                  INTEGER PRIMARY KEY AUTOINCREMENT,
-            weapon_id           INTEGER REFERENCES weapons(id),
-            trigger_description TEXT NOT NULL DEFAULT ''
-        );
-
-        CREATE TABLE IF NOT EXISTS incarnon_evolutions (
-            id                  INTEGER PRIMARY KEY AUTOINCREMENT,
-            incarnon_weapon_id  INTEGER REFERENCES incarnon_weapons(id),
-            tier                INTEGER NOT NULL DEFAULT 0,
-            choice_index        INTEGER NOT NULL DEFAULT 0,
-            description         TEXT NOT NULL DEFAULT ''
-        );
-
-        CREATE TABLE IF NOT EXISTS railjack_intrinsics (
-            id        INTEGER PRIMARY KEY AUTOINCREMENT,
-            tree_name TEXT NOT NULL,
-            rank      INTEGER NOT NULL DEFAULT 0,
-            description TEXT NOT NULL DEFAULT ''
-        );
-
-        CREATE TABLE IF NOT EXISTS landing_craft (
-            id                 INTEGER PRIMARY KEY AUTOINCREMENT,
-            name               TEXT NOT NULL,
-            air_support_ability TEXT NOT NULL DEFAULT '',
-            description        TEXT NOT NULL DEFAULT '',
-            icon_path          TEXT NOT NULL DEFAULT ''
-        );
-
-        CREATE TABLE IF NOT EXISTS cosmetics (
-            id          INTEGER PRIMARY KEY AUTOINCREMENT,
-            name        TEXT NOT NULL,
-            type        TEXT NOT NULL DEFAULT '',
-            warframe_id INTEGER REFERENCES warframes(id),
-            acquisition TEXT NOT NULL DEFAULT '',
-            icon_path   TEXT NOT NULL DEFAULT ''
-        );
-
-        CREATE TABLE IF NOT EXISTS lore_fragments (
-            id         INTEGER PRIMARY KEY AUTOINCREMENT,
-            name       TEXT NOT NULL,
-            type       TEXT NOT NULL DEFAULT '',
-            content    TEXT NOT NULL DEFAULT '',
-            audio_path TEXT NOT NULL DEFAULT '',
-            icon_path  TEXT NOT NULL DEFAULT ''
         );
 
         -- Game tracking
@@ -352,7 +267,7 @@ mod tests {
                 |row| row.get(0),
             )
             .unwrap();
-        assert_eq!(count, 32);
+        assert_eq!(count, 22);
     }
 
     #[test]
