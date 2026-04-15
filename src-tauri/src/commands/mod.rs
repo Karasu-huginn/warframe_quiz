@@ -6,6 +6,9 @@ use crate::fetcher::coordinator::{self, FetchReport, FetchProgress};
 use crate::db::schema;
 use rusqlite::Connection;
 use std::path::Path;
+use crate::game::{GameState, QuizSession};
+use crate::game::question_types::*;
+use crate::game::generators;
 
 #[derive(Serialize)]
 pub struct DbStats {
@@ -40,4 +43,70 @@ pub fn get_db_stats(db: State<'_, Database>) -> Result<DbStats, String> {
         weapon_count: weapons::get_weapon_count(&conn).map_err(|e| e.to_string())?,
         mod_count: mods::get_mod_count(&conn).map_err(|e| e.to_string())?,
     })
+}
+
+#[tauri::command]
+pub fn start_quiz(
+    db: State<'_, Database>,
+    game: State<'_, GameState>,
+    timer_enabled: bool,
+    timer_seconds: u32,
+) -> Result<SessionStats, String> {
+    let conn = db.conn.lock().map_err(|e| e.to_string())?;
+    let mut session_lock = game.session.lock().map_err(|e| e.to_string())?;
+    if let Some(prev) = session_lock.take() {
+        let _ = prev.end(&conn);
+    }
+    let session = QuizSession::start(&conn, timer_enabled, timer_seconds)?;
+    let stats = session.stats();
+    *session_lock = Some(session);
+    Ok(stats)
+}
+
+#[tauri::command]
+pub fn next_question(
+    db: State<'_, Database>,
+    game: State<'_, GameState>,
+) -> Result<Question, String> {
+    let conn = db.conn.lock().map_err(|e| e.to_string())?;
+    let qid = game.next_id();
+    let mut session_lock = game.session.lock().map_err(|e| e.to_string())?;
+    let session = session_lock.as_mut().ok_or("no active session")?;
+    let time_limit = if session.timer_enabled { Some(session.timer_seconds) } else { None };
+    let (question, stored) = generators::generate_question(&conn, qid, time_limit)?;
+    session.current_question = Some(stored);
+    Ok(question)
+}
+
+#[tauri::command]
+pub fn submit_answer(
+    db: State<'_, Database>,
+    game: State<'_, GameState>,
+    answer_index: usize,
+    elapsed_seconds: Option<f64>,
+) -> Result<AnswerResult, String> {
+    let conn = db.conn.lock().map_err(|e| e.to_string())?;
+    let mut session_lock = game.session.lock().map_err(|e| e.to_string())?;
+    let session = session_lock.as_mut().ok_or("no active session")?;
+    session.submit_answer(&conn, answer_index, elapsed_seconds)
+}
+
+#[tauri::command]
+pub fn get_session_stats(
+    game: State<'_, GameState>,
+) -> Result<SessionStats, String> {
+    let session_lock = game.session.lock().map_err(|e| e.to_string())?;
+    let session = session_lock.as_ref().ok_or("no active session")?;
+    Ok(session.stats())
+}
+
+#[tauri::command]
+pub fn end_quiz(
+    db: State<'_, Database>,
+    game: State<'_, GameState>,
+) -> Result<SessionStats, String> {
+    let conn = db.conn.lock().map_err(|e| e.to_string())?;
+    let mut session_lock = game.session.lock().map_err(|e| e.to_string())?;
+    let session = session_lock.take().ok_or("no active session")?;
+    session.end(&conn)
 }

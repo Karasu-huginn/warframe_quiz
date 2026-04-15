@@ -6,6 +6,7 @@ mod commands;
 use db::connection::Database;
 use db::schema;
 use tauri::Manager;
+use game::GameState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -20,11 +21,17 @@ pub fn run() {
                 schema::create_tables(&conn).expect("cannot create tables");
             }
             app.manage(database);
+            app.manage(GameState::new());
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
             commands::get_db_stats,
-            commands::fetch_wiki_data
+            commands::fetch_wiki_data,
+            commands::start_quiz,
+            commands::next_question,
+            commands::submit_answer,
+            commands::get_session_stats,
+            commands::end_quiz,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
