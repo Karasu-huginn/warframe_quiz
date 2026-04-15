@@ -37,7 +37,12 @@ pub fn process_mods_data(conn: &Connection, data: &Value) -> Result<CategoryResu
         match tx.execute(
             "INSERT INTO mods (name, polarity, rarity, mod_type, max_rank, base_drain,
              effect_description, is_exilus, is_augment, icon_path)
-             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)
+             ON CONFLICT(name) DO UPDATE SET
+             polarity=excluded.polarity, rarity=excluded.rarity, mod_type=excluded.mod_type,
+             max_rank=excluded.max_rank, base_drain=excluded.base_drain,
+             effect_description=excluded.effect_description, is_exilus=excluded.is_exilus,
+             is_augment=excluded.is_augment, icon_path=excluded.icon_path",
             params![
                 name, polarity, rarity, mod_type, max_rank, base_drain,
                 effect_description, is_exilus, is_augment, icon_path

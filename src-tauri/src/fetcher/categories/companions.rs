@@ -34,6 +34,9 @@ pub fn process_companions_data(conn: &Connection, data: &Value) -> Result<Catego
         let companion_id: i64 = match tx.query_row(
             "INSERT INTO companions (name, class, health, shields, armor, description, icon_path)
              VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+             ON CONFLICT(name) DO UPDATE SET
+             class=excluded.class, health=excluded.health, shields=excluded.shields,
+             armor=excluded.armor, description=excluded.description, icon_path=excluded.icon_path
              RETURNING id",
             params![name, class, health, shields, armor, description, icon_path],
             |r| r.get(0),

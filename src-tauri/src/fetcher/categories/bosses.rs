@@ -83,7 +83,10 @@ pub fn process_bosses_data(conn: &Connection, data: &Value, faction: &str) -> Re
 
         match tx.execute(
             "INSERT INTO bosses (name, planet, faction, description, icon_path)
-             VALUES (?1, ?2, ?3, ?4, ?5)",
+             VALUES (?1, ?2, ?3, ?4, ?5)
+             ON CONFLICT(name) DO UPDATE SET
+             planet=excluded.planet, faction=excluded.faction,
+             description=excluded.description, icon_path=excluded.icon_path",
             params![name, planet, faction, description, icon_path],
         ) {
             Ok(_) => report.inserted += 1,

@@ -65,7 +65,7 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
 
         CREATE TABLE IF NOT EXISTS mods (
             id              INTEGER PRIMARY KEY AUTOINCREMENT,
-            name            TEXT NOT NULL,
+            name            TEXT NOT NULL UNIQUE,
             polarity        TEXT NOT NULL DEFAULT '',
             rarity          TEXT NOT NULL DEFAULT '',
             mod_type        TEXT NOT NULL DEFAULT '',
@@ -83,7 +83,7 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
 
         CREATE TABLE IF NOT EXISTS bosses (
             id            INTEGER PRIMARY KEY AUTOINCREMENT,
-            name          TEXT NOT NULL,
+            name          TEXT NOT NULL UNIQUE,
             planet        TEXT NOT NULL DEFAULT '',
             faction       TEXT NOT NULL DEFAULT '',
             description   TEXT NOT NULL DEFAULT '',
@@ -94,7 +94,7 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
 
         CREATE TABLE IF NOT EXISTS companions (
             id          INTEGER PRIMARY KEY AUTOINCREMENT,
-            name        TEXT NOT NULL,
+            name        TEXT NOT NULL UNIQUE,
             class       TEXT NOT NULL DEFAULT '',
             breed       TEXT NOT NULL DEFAULT '',
             health      REAL,
@@ -115,7 +115,7 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
 
         CREATE TABLE IF NOT EXISTS planets (
             id              INTEGER PRIMARY KEY AUTOINCREMENT,
-            name            TEXT NOT NULL,
+            name            TEXT NOT NULL UNIQUE,
             faction         TEXT NOT NULL DEFAULT '',
             open_world_name TEXT NOT NULL DEFAULT '',
             hub_name        TEXT NOT NULL DEFAULT '',
@@ -133,7 +133,7 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
 
         CREATE TABLE IF NOT EXISTS syndicates (
             id                   INTEGER PRIMARY KEY AUTOINCREMENT,
-            name                 TEXT NOT NULL,
+            name                 TEXT NOT NULL UNIQUE,
             description          TEXT NOT NULL DEFAULT '',
             leader_name          TEXT NOT NULL DEFAULT '',
             sigil_path           TEXT NOT NULL DEFAULT ''
@@ -148,7 +148,7 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
 
         CREATE TABLE IF NOT EXISTS relics (
             id         INTEGER PRIMARY KEY AUTOINCREMENT,
-            name       TEXT NOT NULL,
+            name       TEXT NOT NULL UNIQUE,
             era        TEXT NOT NULL DEFAULT '',
             is_vaulted INTEGER NOT NULL DEFAULT 0
         );
@@ -165,7 +165,7 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
 
         CREATE TABLE IF NOT EXISTS elements (
             id           INTEGER PRIMARY KEY AUTOINCREMENT,
-            name         TEXT NOT NULL,
+            name         TEXT NOT NULL UNIQUE,
             element_type TEXT NOT NULL DEFAULT '',
             status_effect TEXT NOT NULL DEFAULT '',
             component_a  TEXT NOT NULL DEFAULT '',
@@ -182,7 +182,7 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
 
         CREATE TABLE IF NOT EXISTS arcanes (
             id               INTEGER PRIMARY KEY AUTOINCREMENT,
-            name             TEXT NOT NULL,
+            name             TEXT NOT NULL UNIQUE,
             trigger_condition TEXT NOT NULL DEFAULT '',
             effect           TEXT NOT NULL DEFAULT '',
             max_rank         INTEGER NOT NULL DEFAULT 0,
@@ -193,7 +193,7 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
 
         CREATE TABLE IF NOT EXISTS focus_schools (
             id          INTEGER PRIMARY KEY AUTOINCREMENT,
-            name        TEXT NOT NULL,
+            name        TEXT NOT NULL UNIQUE,
             description TEXT NOT NULL DEFAULT '',
             symbol_path TEXT NOT NULL DEFAULT ''
         );
