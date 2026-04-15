@@ -7,3 +7,6 @@ pub mod bosses;
 pub mod planets;
 pub mod factions;
 pub mod focus;
+pub mod arcanes;
+pub mod damage_types;
+pub mod relics;
