@@ -1,8 +1,10 @@
 pub mod wiki_client;
 pub mod lua_parser;
 pub mod categories;
+pub mod image_downloader;
+pub mod coordinator;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, serde::Serialize)]
 pub struct CategoryReport {
     pub category: String,
     pub inserted: usize,
