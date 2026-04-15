@@ -5,6 +5,8 @@ pub mod weapon_by_stats;
 pub mod mod_by_effect;
 pub mod boss_faction;
 pub mod planet_by_resource;
+pub mod element_combination;
+pub mod focus_school_by_ability;
 
 use rusqlite::Connection;
 use rand::seq::SliceRandom;
@@ -23,6 +25,8 @@ pub fn generate_question(
         mod_by_effect::generate,
         boss_faction::generate,
         planet_by_resource::generate,
+        element_combination::generate,
+        focus_school_by_ability::generate,
     ];
 
     let mut indices: Vec<usize> = (0..types.len()).collect();
