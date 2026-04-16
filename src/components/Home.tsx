@@ -14,14 +14,14 @@ export default function Home({ stats, onPlay, onSettings, onStats }: HomeProps) 
 
   return (
     <div className="home">
-      <button className="settings-pill" onClick={onSettings}>
-        <span className="gear-icon">&#9881;</span> Paramètres
-      </button>
-
       <div className="logo">Warframedle</div>
       <div className="divider" />
 
       <button className="play-btn" onClick={onPlay}>Jouer</button>
+
+      <button className="settings-pill" onClick={onSettings}>
+        <span className="gear-icon">&#9881;</span> Paramètres
+      </button>
 
       {stats && (
         <div className="stats-row">

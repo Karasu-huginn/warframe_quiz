@@ -299,6 +299,7 @@ body {
 }
 
 .next-btn {
+  margin-top: 24px;
   padding: 10px 36px;
   background: var(--accent-bg);
   border: var(--button-border-width) solid var(--accent-border);
@@ -382,10 +383,8 @@ body {
 
 /* Settings gear pill */
 .settings-pill {
-  position: absolute;
-  top: 20px;
-  right: 20px;
   display: flex;
+  margin-top: 16px;
   align-items: center;
   gap: 6px;
   padding: 6px 14px;

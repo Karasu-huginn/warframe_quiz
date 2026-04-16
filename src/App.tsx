@@ -28,7 +28,7 @@ function App() {
 
   const handlePlay = async () => {
     try {
-      await invoke("start_quiz", { timer_enabled: timerEnabled, timer_seconds: timerSeconds });
+      await invoke("start_quiz", { timerEnabled, timerSeconds });
       setScreen("quiz");
     } catch (e) { console.error("Failed to start quiz:", e); }
   };

@@ -158,3 +158,18 @@ pub fn get_recent_sessions(db: State<'_, Database>, limit: i64) -> Result<Vec<Re
     })).map_err(|e| e.to_string())?;
     rows.collect::<Result<Vec<_>, _>>().map_err(|e| e.to_string())
 }
+
+#[tauri::command]
+pub fn get_asset_base64(db: State<'_, Database>, relative_path: String) -> Result<String, String> {
+    use base64::Engine;
+    let full_path = db.path.parent().unwrap_or(Path::new(".")).join("assets").join(&relative_path);
+    let bytes = std::fs::read(&full_path).map_err(|e| format!("cannot read {}: {e}", full_path.display()))?;
+    let ext = full_path.extension().and_then(|e| e.to_str()).unwrap_or("png");
+    let mime = match ext {
+        "jpg" | "jpeg" => "image/jpeg",
+        "webp" => "image/webp",
+        _ => "image/png",
+    };
+    let b64 = base64::engine::general_purpose::STANDARD.encode(&bytes);
+    Ok(format!("data:{mime};base64,{b64}"))
+}

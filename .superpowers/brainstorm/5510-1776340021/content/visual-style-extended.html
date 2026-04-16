@@ -1,0 +1,138 @@
+<h2>Visual Style for Warframedle — Extended Options</h2>
+<p class="subtitle">3 original options + 3 new distinctive directions. Click to select your favorite.</p>
+
+<div class="cards">
+
+  <!-- ORIGINAL A -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0d0d2b 100%); height: 200px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(0,200,255,0.03) 40px,rgba(0,200,255,0.03) 41px);"></div>
+      <div style="text-align:center;z-index:1;">
+        <div style="font-size:24px;font-weight:700;color:#00c8ff;text-shadow:0 0 20px rgba(0,200,255,0.5);letter-spacing:3px;">WARFRAMEDLE</div>
+        <div style="margin-top:10px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
+          <div style="padding:7px 20px;border:1px solid rgba(0,200,255,0.4);color:#b0e0ff;font-size:12px;border-radius:2px;">Excalibur</div>
+          <div style="padding:7px 20px;border:1px solid rgba(0,200,255,0.4);color:#b0e0ff;font-size:12px;border-radius:2px;">Mag</div>
+          <div style="padding:7px 20px;border:1px solid rgba(0,200,255,0.4);color:#b0e0ff;font-size:12px;border-radius:2px;">Volt</div>
+          <div style="padding:7px 20px;border:1px solid rgba(255,100,100,0.4);color:#ffaaaa;font-size:12px;border-radius:2px;background:rgba(255,50,50,0.1);">Frost</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A: Warframe HUD</h3>
+      <p>Cyan accents on deep blue. In-game Tenno interface aesthetic. Sharp, militaristic.</p>
+    </div>
+  </div>
+
+  <!-- ORIGINAL B -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: linear-gradient(180deg, #0f0f0f 0%, #1a1a1a 100%); height: 200px; display: flex; align-items: center; justify-content: center;">
+      <div style="text-align:center;">
+        <div style="font-size:24px;font-weight:800;color:#ffffff;letter-spacing:2px;">WARFRAMEDLE</div>
+        <div style="margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+          <div style="padding:8px 22px;background:#2a2a2a;color:#e0e0e0;font-size:13px;border-radius:8px;">Excalibur</div>
+          <div style="padding:8px 22px;background:#2a2a2a;color:#e0e0e0;font-size:13px;border-radius:8px;">Mag</div>
+          <div style="padding:8px 22px;background:#2a2a2a;color:#e0e0e0;font-size:13px;border-radius:8px;">Volt</div>
+          <div style="padding:8px 22px;background:#3d1a1a;color:#ff8888;font-size:13px;border-radius:8px;">Frost</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B: Clean Dark Modern</h3>
+      <p>Minimal. Rounded. Neutral. Like LoLdle and modern quiz apps.</p>
+    </div>
+  </div>
+
+  <!-- ORIGINAL C -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: linear-gradient(135deg, #0a0e1a 0%, #1a0e2e 50%, #0e1a2a 100%); height: 200px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+      <div style="position:absolute;top:50%;left:50%;width:300px;height:300px;background:radial-gradient(circle,rgba(180,120,255,0.08) 0%,transparent 70%);transform:translate(-50%,-50%);"></div>
+      <div style="text-align:center;z-index:1;">
+        <div style="font-size:22px;font-weight:700;background:linear-gradient(90deg,#b478ff,#00c8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;">WARFRAMEDLE</div>
+        <div style="margin-top:12px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
+          <div style="padding:7px 20px;background:rgba(180,120,255,0.1);border:1px solid rgba(180,120,255,0.3);color:#d4b0ff;font-size:12px;border-radius:6px;">Excalibur</div>
+          <div style="padding:7px 20px;background:rgba(180,120,255,0.1);border:1px solid rgba(180,120,255,0.3);color:#d4b0ff;font-size:12px;border-radius:6px;">Mag</div>
+          <div style="padding:7px 20px;background:rgba(180,120,255,0.1);border:1px solid rgba(180,120,255,0.3);color:#d4b0ff;font-size:12px;border-radius:6px;">Volt</div>
+          <div style="padding:7px 20px;background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.3);color:#ffaaaa;font-size:12px;border-radius:6px;">Frost</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C: Void / Orokin</h3>
+      <p>Purple-blue gradients with gold undertones. Void-inspired elegance.</p>
+    </div>
+  </div>
+
+  <!-- NEW D: Grineer Industrial -->
+  <div class="card" data-choice="d" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: #1c1a17; height: 200px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+      <!-- Rust/grime texture overlay -->
+      <div style="position:absolute;inset:0;background:
+        repeating-linear-gradient(90deg, transparent 0px, transparent 3px, rgba(120,90,50,0.04) 3px, rgba(120,90,50,0.04) 4px),
+        repeating-linear-gradient(0deg, transparent 0px, transparent 8px, rgba(0,0,0,0.08) 8px, rgba(0,0,0,0.08) 9px);"></div>
+      <!-- Warning stripe at top -->
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:repeating-linear-gradient(90deg,#c4a135 0px,#c4a135 12px,#1c1a17 12px,#1c1a17 24px);"></div>
+      <div style="text-align:center;z-index:1;">
+        <div style="font-size:22px;font-weight:900;color:#c4a135;letter-spacing:6px;text-transform:uppercase;font-family:'Courier New',monospace;text-shadow:1px 1px 0 #000;">WARFRAMEDLE</div>
+        <div style="margin-top:12px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
+          <div style="padding:7px 18px;background:#2a2520;border:2px solid #5a4a30;color:#d4b878;font-size:12px;font-family:'Courier New',monospace;font-weight:700;text-transform:uppercase;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);">Excalibur</div>
+          <div style="padding:7px 18px;background:#2a2520;border:2px solid #5a4a30;color:#d4b878;font-size:12px;font-family:'Courier New',monospace;font-weight:700;text-transform:uppercase;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);">Mag</div>
+          <div style="padding:7px 18px;background:#2a2520;border:2px solid #5a4a30;color:#d4b878;font-size:12px;font-family:'Courier New',monospace;font-weight:700;text-transform:uppercase;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);">Volt</div>
+          <div style="padding:7px 18px;background:#3a1c1c;border:2px solid #8b3030;color:#e07070;font-size:12px;font-family:'Courier New',monospace;font-weight:700;text-transform:uppercase;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);">Frost</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>D: Grineer Industrial</h3>
+      <p>Rusty brown/amber on dark steel. Monospace type, angled button cuts, hazard stripes. Brutal, mechanical, oppressive — like a Grineer command console.</p>
+    </div>
+  </div>
+
+  <!-- NEW E: Lotus Transmission -->
+  <div class="card" data-choice="e" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: radial-gradient(ellipse at 50% 120%, #0d2a20 0%, #060e0b 70%); height: 200px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+      <!-- Scanline effect -->
+      <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,140,0.015) 2px,rgba(0,255,140,0.015) 4px);pointer-events:none;"></div>
+      <!-- Lotus symbol glow in background -->
+      <div style="position:absolute;top:50%;left:50%;width:200px;height:200px;background:radial-gradient(circle,rgba(0,255,140,0.06) 0%,transparent 60%);transform:translate(-50%,-50%);border-radius:50%;"></div>
+      <div style="text-align:center;z-index:1;">
+        <div style="font-size:13px;color:rgba(0,255,140,0.5);letter-spacing:8px;text-transform:uppercase;margin-bottom:4px;">// incoming transmission</div>
+        <div style="font-size:24px;font-weight:300;color:#00ff8c;letter-spacing:4px;text-shadow:0 0 30px rgba(0,255,140,0.3);">WARFRAMEDLE</div>
+        <div style="margin-top:14px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
+          <div style="padding:7px 20px;border:1px solid rgba(0,255,140,0.25);color:#80ffc0;font-size:12px;letter-spacing:1px;background:rgba(0,255,140,0.04);border-radius:1px;">Excalibur</div>
+          <div style="padding:7px 20px;border:1px solid rgba(0,255,140,0.25);color:#80ffc0;font-size:12px;letter-spacing:1px;background:rgba(0,255,140,0.04);border-radius:1px;">Mag</div>
+          <div style="padding:7px 20px;border:1px solid rgba(0,255,140,0.25);color:#80ffc0;font-size:12px;letter-spacing:1px;background:rgba(0,255,140,0.04);border-radius:1px;">Volt</div>
+          <div style="padding:7px 20px;border:1px solid rgba(255,80,80,0.3);color:#ff9090;font-size:12px;letter-spacing:1px;background:rgba(255,50,50,0.06);border-radius:1px;">Frost</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>E: Lotus Transmission</h3>
+      <p>Deep green-black with mint/jade accents. Scanline texture, ethereal glow. Feels like receiving a mission briefing from the Lotus. Atmospheric and immersive.</p>
+    </div>
+  </div>
+
+  <!-- NEW F: Duviri Painterly -->
+  <div class="card" data-choice="f" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: linear-gradient(160deg, #1a1520 0%, #201828 30%, #18141e 60%, #1e1525 100%); height: 200px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+      <!-- Dreamy bokeh-like circles -->
+      <div style="position:absolute;top:20px;left:30px;width:80px;height:80px;background:radial-gradient(circle,rgba(255,180,100,0.07) 0%,transparent 70%);border-radius:50%;"></div>
+      <div style="position:absolute;bottom:10px;right:40px;width:120px;height:120px;background:radial-gradient(circle,rgba(180,140,255,0.06) 0%,transparent 70%);border-radius:50%;"></div>
+      <div style="position:absolute;top:60px;right:80px;width:40px;height:40px;background:radial-gradient(circle,rgba(255,220,180,0.08) 0%,transparent 70%);border-radius:50%;"></div>
+      <div style="text-align:center;z-index:1;">
+        <div style="font-size:26px;font-weight:300;color:#e8d8c8;letter-spacing:6px;font-style:italic;">Warframedle</div>
+        <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,200,150,0.4),transparent);margin:10px auto;"></div>
+        <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+          <div style="padding:8px 20px;background:rgba(255,220,180,0.06);border:1px solid rgba(255,200,150,0.2);color:#e0cbb0;font-size:12px;border-radius:20px;font-style:italic;">Excalibur</div>
+          <div style="padding:8px 20px;background:rgba(255,220,180,0.06);border:1px solid rgba(255,200,150,0.2);color:#e0cbb0;font-size:12px;border-radius:20px;font-style:italic;">Mag</div>
+          <div style="padding:8px 20px;background:rgba(255,220,180,0.06);border:1px solid rgba(255,200,150,0.2);color:#e0cbb0;font-size:12px;border-radius:20px;font-style:italic;">Volt</div>
+          <div style="padding:8px 20px;background:rgba(180,60,60,0.1);border:1px solid rgba(255,100,100,0.25);color:#e0a0a0;font-size:12px;border-radius:20px;font-style:italic;">Frost</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>F: Duviri Painterly</h3>
+      <p>Muted warm tones on charcoal. Soft bokeh, italic serif type, pill-shaped buttons. Dreamlike and theatrical — inspired by Duviri's surreal watercolor world.</p>
+    </div>
+  </div>
+
+</div>
