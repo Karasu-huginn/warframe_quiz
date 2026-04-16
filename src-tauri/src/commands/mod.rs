@@ -110,3 +110,51 @@ pub fn end_quiz(
     let session = session_lock.take().ok_or("no active session")?;
     session.end(&conn)
 }
+
+#[derive(Serialize)]
+pub struct OverallStats {
+    pub total_games: i64,
+    pub best_streak: i64,
+    pub total_correct: i64,
+    pub total_answered: i64,
+}
+
+#[derive(Serialize)]
+pub struct RecentSession {
+    pub id: i64,
+    pub started_at: String,
+    pub score: i64,
+    pub total_questions: i64,
+    pub best_streak: i64,
+}
+
+#[tauri::command]
+pub fn get_overall_stats(db: State<'_, Database>) -> Result<OverallStats, String> {
+    let conn = db.conn.lock().map_err(|e| e.to_string())?;
+    conn.query_row(
+        "SELECT COUNT(*), COALESCE(MAX(best_streak), 0), COALESCE(SUM(score), 0), COALESCE(SUM(total_questions), 0) FROM quiz_sessions",
+        [],
+        |row| Ok(OverallStats {
+            total_games: row.get(0)?,
+            best_streak: row.get(1)?,
+            total_correct: row.get(2)?,
+            total_answered: row.get(3)?,
+        }),
+    ).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn get_recent_sessions(db: State<'_, Database>, limit: i64) -> Result<Vec<RecentSession>, String> {
+    let conn = db.conn.lock().map_err(|e| e.to_string())?;
+    let mut stmt = conn.prepare(
+        "SELECT id, started_at, score, total_questions, best_streak FROM quiz_sessions ORDER BY id DESC LIMIT ?1"
+    ).map_err(|e| e.to_string())?;
+    let rows = stmt.query_map(rusqlite::params![limit], |row| Ok(RecentSession {
+        id: row.get(0)?,
+        started_at: row.get(1)?,
+        score: row.get(2)?,
+        total_questions: row.get(3)?,
+        best_streak: row.get(4)?,
+    })).map_err(|e| e.to_string())?;
+    rows.collect::<Result<Vec<_>, _>>().map_err(|e| e.to_string())
+}

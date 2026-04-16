@@ -32,6 +32,8 @@ pub fn run() {
             commands::submit_answer,
             commands::get_session_stats,
             commands::end_quiz,
+            commands::get_overall_stats,
+            commands::get_recent_sessions,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

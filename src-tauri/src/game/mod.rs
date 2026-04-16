@@ -99,8 +99,8 @@ impl QuizSession {
 
     pub fn end(&self, conn: &Connection) -> Result<SessionStats, String> {
         conn.execute(
-            "UPDATE quiz_sessions SET score = ?1, total_questions = ?2 WHERE id = ?3",
-            params![self.score, self.total, self.id],
+            "UPDATE quiz_sessions SET score = ?1, total_questions = ?2, best_streak = ?3 WHERE id = ?4",
+            params![self.score, self.total, self.best_streak, self.id],
         ).map_err(|e| e.to_string())?;
         Ok(self.stats())
     }

@@ -242,7 +242,13 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
             category   TEXT NOT NULL DEFAULT '',
             fetched_at TEXT NOT NULL DEFAULT ''
         );
-    ")
+    ")?;
+    // Migration: add best_streak column if not present
+    let _ = conn.execute(
+        "ALTER TABLE quiz_sessions ADD COLUMN best_streak INTEGER NOT NULL DEFAULT 0",
+        [],
+    );
+    Ok(())
 }
 
 #[cfg(test)]
