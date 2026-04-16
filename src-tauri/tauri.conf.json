@@ -1,5 +1,4 @@
 {
-  "$schema": "https://raw.githubusercontent.com/nicedoc/tauri/v2/crates/tauri-cli/schema.json",
   "productName": "Warframedle",
   "version": "0.1.0",
   "identifier": "com.warframedle.app",
@@ -22,6 +21,11 @@
     }
   },
   "bundle": {
-    "active": false
+    "active": true,
+    "targets": ["nsis"],
+    "icon": [
+      "icons/icon.ico",
+      "icons/icon.png"
+    ]
   }
 }
