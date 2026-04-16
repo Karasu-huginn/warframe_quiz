@@ -1,76 +1,72 @@
 import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
-import { listen } from "@tauri-apps/api/event";
-
-interface DbStats {
-  warframe_count: number;
-  ability_count: number;
-  weapon_count: number;
-  mod_count: number;
-}
-
-interface FetchProgress {
-  category: string;
-  status: string;
-  current: number;
-  total: number;
-  message: string;
-}
+import { Theme, Screen, OverallStats } from "./types";
+import Home from "./components/Home";
+import Quiz from "./components/Quiz";
+import Settings from "./components/Settings";
+import Stats from "./components/Stats";
+import "./App.css";
 
 function App() {
-  const [stats, setStats] = useState<DbStats | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [fetching, setFetching] = useState(false);
-  const [progress, setProgress] = useState<FetchProgress | null>(null);
+  const [screen, setScreen] = useState<Screen>("home");
+  const [theme, setTheme] = useState<Theme>(() => {
+    return (localStorage.getItem("warframedle-theme") as Theme) || "duviri";
+  });
+  const [overallStats, setOverallStats] = useState<OverallStats | null>(null);
 
-  const loadStats = () => {
-    invoke<DbStats>("get_db_stats")
-      .then(setStats)
-      .catch((e) => setError(String(e)));
+  const loadOverallStats = () => {
+    invoke<OverallStats>("get_overall_stats")
+      .then(setOverallStats)
+      .catch(console.error);
   };
 
-  useEffect(() => {
-    loadStats();
-    const unlisten = listen<FetchProgress>("fetch_progress", (event) => {
-      setProgress(event.payload);
-    });
-    return () => { unlisten.then((f) => f()); };
-  }, []);
+  useEffect(() => { loadOverallStats(); }, []);
+  useEffect(() => { localStorage.setItem("warframedle-theme", theme); }, [theme]);
 
-  const handleFetch = async () => {
-    setFetching(true);
-    setError(null);
+  const timerEnabled = localStorage.getItem("warframedle-timer") === "true";
+  const timerSeconds = parseInt(localStorage.getItem("warframedle-timer-seconds") || "15", 10);
+
+  const handlePlay = async () => {
     try {
-      await invoke("fetch_wiki_data");
-      loadStats();
-    } catch (e) {
-      setError(String(e));
-    } finally {
-      setFetching(false);
-      setProgress(null);
-    }
+      await invoke("start_quiz", { timer_enabled: timerEnabled, timer_seconds: timerSeconds });
+      setScreen("quiz");
+    } catch (e) { console.error("Failed to start quiz:", e); }
+  };
+
+  const handleQuitQuiz = async () => {
+    try { await invoke("end_quiz"); } catch (_) { /* session may already be ended */ }
+    loadOverallStats();
+    setScreen("home");
   };
 
   return (
-    <div>
-      <h1>Warframedle</h1>
-      {error && <p style={{ color: "red" }}>Error: {error}</p>}
-      {stats && (
-        <div>
-          <h2>Database Status</h2>
-          <ul>
-            <li>Warframes: {stats.warframe_count}</li>
-            <li>Abilities: {stats.ability_count}</li>
-            <li>Weapons: {stats.weapon_count}</li>
-            <li>Mods: {stats.mod_count}</li>
-          </ul>
-        </div>
+    <div className="app" data-theme={theme}>
+      {screen === "home" && (
+        <Home
+          stats={overallStats}
+          onPlay={handlePlay}
+          onSettings={() => setScreen("settings")}
+          onStats={() => setScreen("stats")}
+        />
       )}
-      <button onClick={handleFetch} disabled={fetching}>
-        {fetching ? "Fetching..." : "Fetch Wiki Data"}
-      </button>
-      {progress && (
-        <p>{progress.message} ({progress.current}/{progress.total})</p>
+      {screen === "quiz" && (
+        <Quiz
+          timerEnabled={timerEnabled}
+          timerSeconds={timerSeconds}
+          onQuit={handleQuitQuiz}
+        />
+      )}
+      {screen === "settings" && (
+        <Settings
+          theme={theme}
+          onThemeChange={setTheme}
+          onBack={() => setScreen("home")}
+        />
+      )}
+      {screen === "stats" && (
+        <Stats
+          onBack={() => { loadOverallStats(); setScreen("home"); }}
+        />
       )}
     </div>
   );
